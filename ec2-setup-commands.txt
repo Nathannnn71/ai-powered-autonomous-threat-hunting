@@ -1,3 +1,25 @@
+# Commands to Run on EC2 Instance
+# Copy and paste these one by one in the EC2 browser terminal
+
+# 1. Update system
+sudo apt update && sudo apt upgrade -y
+
+# 2. Install Node.js 18
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# 3. Install PM2 (process manager)
+sudo npm install -g pm2
+
+# 4. Install AWS CLI (if not already installed)
+sudo apt install -y awscli
+
+# 5. Create project directory
+mkdir -p ~/ai-threat-dashboard
+cd ~/ai-threat-dashboard
+
+# 6. Create package.json (copy this entire block)
+cat > package.json << 'EOF'
 {
   "name": "ai-threat-dashboard",
   "private": true,
@@ -34,3 +56,12 @@
     "vite": "^7.1.6"
   }
 }
+EOF
+
+# 7. Install dependencies
+npm install
+
+# 8. Check if installation worked
+node --version
+npm --version
+pm2 --version
