@@ -5,7 +5,7 @@ InfiLoop is a **single-page React dashboard** that visualizes AI-generated secur
 
 ---
 
-## 🚀 Live Data Source
+## 🚀 S3 Bucket Website (Static)
 Frontend pulls data directly from S3:
 
 ```
