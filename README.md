@@ -43,9 +43,8 @@ s3://\<YOUR\_BUCKET>/latest\_analysis.json
 - **Alerts evolution** over time  
 - **Recent logs trend** (driven by metrics array)
 
-### 6. (Optional) Chatbot Component
+### 6.  Chatbot Component
 - Can **POST to a Lambda / API Gateway endpoint** for AI assistance  
-- Remove component file to disable
 
 ---
 
