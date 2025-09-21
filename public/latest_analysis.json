@@ -1,0 +1,109 @@
+  {
+    "summary": {
+      "summary": "Multiple authentication attempts detected, likely a brute-force attack.",
+      "common_patterns": [
+        "Authentication failed",
+        "User login failed"
+      ],
+      "key_findings": [
+        "Multiple authentication attempts detected",
+        "Likely a brute-force attack"
+      ],
+      "total_logs": 4,
+      "normal_logs": 0,
+      "abnormal_logs": 4
+    },
+  "logs": [
+    {
+      "original_log": "sshd: authentication failed | IndexTime: 2025-09-21T03:24:19.871Z | LogTime: Sep 21 03:24:19 | SrcIP=192.168.1.225",
+      "hypothesis_id": "12345678-1234-1234-1234-123456789012",
+      "src_ip": "192.168.1.225",
+      "hypothesis": "An attacker is attempting to brute-force SSH credentials.",
+      "observed_patterns": [
+        "Authentication failed",
+        "User login failed"
+      ],
+      "confidence_score": 80,
+      "confidence": 0.8,
+      "category": "abnormal",
+      "vulnerabilities": [
+        "MITRE:T1021.004",
+        "MITRE:T1110",
+        "MITRE:T1110.001"
+      ],
+      "investigation_log": "The log indicates multiple authentication attempts failed. The MITRE IDs suggest a brute-force attack.",
+      "recommendations": [
+        "Monitor SSH logs for further attempts",
+        "Implement rate limiting for SSH connections"
+      ]
+    },
+    {
+      "original_log": "PAM: User login failed. | IndexTime: 2025-09-21T03:37:27.964Z | LogTime: Sep 21 03:37:26 | SrcIP=192.168.2.25",
+      "hypothesis_id": "23456789-2345-2345-2345-234567890123",
+      "src_ip": "192.168.2.25",
+      "hypothesis": "An attacker is attempting to brute-force PAM credentials.",
+      "observed_patterns": [
+        "User login failed"
+      ],
+      "confidence_score": 80,
+      "confidence": 0.8,
+      "category": "abnormal",
+      "vulnerabilities": [
+        "MITRE:T1110.001"
+      ],
+      "investigation_log": "The log indicates a user login failed. The MITRE ID suggests a brute-force attack.",
+      "recommendations": [
+        "Monitor PAM logs for further attempts",
+        "Implement rate limiting for PAM connections"
+      ]
+    },
+    {
+      "original_log": "unix_chkpwd: Password check failed. | IndexTime: 2025-09-21T03:37:27.964Z | LogTime: Sep 21 03:37:26 | SrcIP=192.168.2.25",
+      "hypothesis_id": "34567890-3456-3456-3456-345678901234",
+      "src_ip": "192.168.2.25",
+      "hypothesis": "An attacker is attempting to brute-force Unix password checks.",
+      "observed_patterns": [
+        "Password check failed"
+      ],
+      "confidence_score": 75,
+      "confidence": 0.75,
+      "category": "abnormal",
+      "vulnerabilities": [
+        "MITRE:T1110.001"
+      ],
+      "investigation_log": "The log indicates repeated Unix password check failures. This strongly suggests brute-force attempts.",
+      "recommendations": [
+        "Investigate repeated Unix password failures",
+        "Consider account lockout policies"
+      ]
+    },
+    {
+      "original_log": "sshd: multiple failed logins | IndexTime: 2025-09-21T03:50:10.124Z | LogTime: Sep 21 03:50:09 | SrcIP=192.168.3.15",
+      "hypothesis_id": "45678901-4567-4567-4567-456789012345",
+      "src_ip": "192.168.3.15",
+      "hypothesis": "An attacker is conducting repeated SSH brute-force attempts.",
+      "observed_patterns": [
+        "Multiple failed logins",
+        "SSH access attempts"
+      ],
+      "confidence_score": 85,
+      "confidence": 0.85,
+      "category": "abnormal",
+      "vulnerabilities": [
+        "MITRE:T1021.004",
+        "MITRE:T1110"
+      ],
+      "investigation_log": "The log shows multiple failed SSH logins from a single source IP, matching brute-force patterns.",
+      "recommendations": [
+        "Block offending IP",
+        "Enable intrusion detection alerts for SSH brute-force"
+      ]
+    }
+  ],
+  "metrics": [
+    { "time": "08:00", "anomalies": 2, "logs": 5 },
+    { "time": "09:00", "anomalies": 3, "logs": 7 },
+    { "time": "10:00", "anomalies": 1, "logs": 6 },
+    { "time": "11:00", "anomalies": 4, "logs": 8 }
+  ]
+}

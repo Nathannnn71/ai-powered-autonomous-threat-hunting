@@ -1,0 +1,5843 @@
+[
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Rqq7ZJkBbhCOWrYIzdDr",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "audit": {
+          "pid": "6889",
+          "id": "552",
+          "type": "AVC",
+          "command": "passwd"
+        }
+      },
+      "rule": {
+        "firedtimes": 1,
+        "mail": false,
+        "level": 3,
+        "hipaa": [
+          "164.312.b"
+        ],
+        "pci_dss": [
+          "10.6.1"
+        ],
+        "tsc": [
+          "CC7.2",
+          "CC7.3"
+        ],
+        "description": "Auditd: SELinux permission check.",
+        "groups": [
+          "audit",
+          "audit_selinux"
+        ],
+        "id": "80730",
+        "nist_800_53": [
+          "AU.6"
+        ],
+        "gdpr": [
+          "IV_30.1.g",
+          "IV_35.7.d"
+        ]
+      },
+      "decoder": {
+        "name": "auditd"
+      },
+      "full_log": "type=AVC msg=audit(1758331612.103:552): avc:  denied  { read } for  pid=6889 comm=\"passwd\" path=\"/var/ossec/tmp/vd_1.0.0_vd_4.13.0.tar.xz\" dev=\"xvda1\" ino=192950597 scontext=system_u:system_r:passwd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:52.679Z",
+      "location": "/var/log/audit/audit.log",
+      "id": "1758331612.0",
+      "timestamp": "2025-09-20T01:26:52.679+0000"
+    },
+    "sort": [
+      1758331612679
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "R6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "audit": {
+          "pid": "6889",
+          "id": "553",
+          "type": "AVC",
+          "command": "passwd"
+        }
+      },
+      "rule": {
+        "firedtimes": 2,
+        "mail": false,
+        "level": 3,
+        "hipaa": [
+          "164.312.b"
+        ],
+        "pci_dss": [
+          "10.6.1"
+        ],
+        "tsc": [
+          "CC7.2",
+          "CC7.3"
+        ],
+        "description": "Auditd: SELinux permission check.",
+        "groups": [
+          "audit",
+          "audit_selinux"
+        ],
+        "id": "80730",
+        "nist_800_53": [
+          "AU.6"
+        ],
+        "gdpr": [
+          "IV_30.1.g",
+          "IV_35.7.d"
+        ]
+      },
+      "decoder": {
+        "name": "auditd"
+      },
+      "full_log": "type=AVC msg=audit(1758331612.103:553): avc:  denied  { write } for  pid=6889 comm=\"passwd\" path=\"/var/ossec/tmp/vd_1.0.0_vd_4.13.0.tar\" dev=\"xvda1\" ino=192950504 scontext=system_u:system_r:passwd_t:s0 tcontext=system_u:object_r:var_t:s0 tclass=file permissive=1",
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:52.679Z",
+      "location": "/var/log/audit/audit.log",
+      "id": "1758331612.602",
+      "timestamp": "2025-09-20T01:26:52.679+0000"
+    },
+    "sort": [
+      1758331612679
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "SKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Run the following script to disable squashfs: #!/usr/bin/env bash { l_mname=\"squashfs\" # set module name # Check if the module exists on the system if [ -z \"$(modprobe -n -v \"$l_mname\" 2>&1 | grep -Pi -- \"\\h*modprobe:\\h+FATAL:\\h+Module\\h+$l_mname\\h+not\\h+found\\h+in\\h+directory\")\" ]; then # Remediate loadable l_loadable=\"$(modprobe -n -v \"$l_mname\")\" [ \"$(wc -l <<< \"$l_loadable\")\" -gt \"1\" ] && l_loadable=\"$(grep -P -- \"(^\\h*install|\b$l_mname)\b\" <<< \"$l_loadable\")\" if ! grep -Pq -- '^\\h*install /bin/(true|false)' <<< \"$l_loadable\"; then echo -e \" - setting module: \"$l_mname\" to be not loadable\" echo -e \"install $l_mname /bin/false\" >> /etc/modprobe.d/\"$l_mname\".conf fi # Remediate loaded if lsmod | grep \"$l_mname\" > /dev/null 2>&1; then echo -e \" - unloading module \"$l_mname\"\" modprobe -r \"$l_mname\" fi # Remediate deny list if ! modprobe --showconfig | grep -Pq -- \"^\\h*blacklist\\h+$l_mname\b\"; then echo -e \" - deny listing \"$l_mname\"\" echo -e \"blacklist $l_mname\" >> /etc/modprobe.d/ $l_mname\".conf fi else echo -e \" - Nothing to remediate\\n - Module \"$l_mname\" doesn't exist on the system\" fi}.",
+            "compliance": {
+              "cis_csc_v8": "4.8",
+              "soc_2": "CC6.3,CC6.6",
+              "pci_dss_4": {
+                "0": "1.2.5,2.2.4,6.4.1"
+              },
+              "nist_sp_800-53": "CM-7",
+              "pci_dss_3": {
+                "2": {
+                  "1": "1.1.6,1.2.1,2.2.2,2.2.5"
+                }
+              },
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1005",
+              "cis": "1.1.1.1",
+              "cmmc_v2": {
+                "0": "CM.L2-3.4.7,CM.L2-3.4.8,SC.L2-3.13.6"
+              },
+              "iso_27001-2013": "A.13.1.3",
+              "cis_csc_v7": "9.2",
+              "mitre_mitigations": "M1050"
+            },
+            "description": "The squashfs filesystem type is a compressed read-only Linux filesystem embedded in small footprint systems. A squashfs image can be used without having to first decompress the image.",
+            "id": "31000",
+            "title": "Ensure mounting of squashfs filesystems is disabled.",
+            "rationale": "Removing support for unneeded filesystem types reduces the local attack surface of the system. If this filesystem type is not needed, disable it.",
+            "command": [
+              "modprobe -n -v squashfs"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "4.8"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-7"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure mounting of squashfs filesystems is disabled.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1005"
+        ],
+        "cis": [
+          "1.1.1.1"
+        ],
+        "iso_27001-2013": [
+          "A.13.1.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1050"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 1,
+        "soc_2": [
+          "CC6.3",
+          "CC6.6"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "9.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.503Z",
+      "location": "sca",
+      "id": "1758331617.1204",
+      "timestamp": "2025-09-20T01:26:57.503+0000"
+    },
+    "sort": [
+      1758331617503
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Saq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Run the following script to disable the udf filesystem: #!/usr/bin/env bash { l_mname=\"udf\" # set module name # Check if the module exists on the system if [ -z \"$(modprobe -n -v \"$l_mname\" 2>&1 | grep -Pi -- \"\\h*modprobe:\\h+FATAL:\\h +Module\\h+$l_mname\\h+not\\h+found\\h+in\\h+directory\")\" ]; then \\# Remediate loadable l_loadable=\"$(modprobe -n -v \"$l_mname\")\" [ \"$(wc -l <<< \"$l_loadable\")\" -gt \"1\" ] && l_loadable=\"$(grep -P -- \"(^\\h*install|\b$l_mname)\b\" <<< \"$l_loadable\")\" if ! grep -Pq -- '^\\h*install /bin/(true|false)' <<< \"$l_loadable\"; then echo -e \" - setting module: \"$l_mname\" to be not loadable\" echo -e \"install $l_mname /bin/false\" >> /etc/modprobe.d/\"$l_mname\".conf fi \\# Remediate loaded if lsmod | grep \"$l_mname\" > /dev/null 2>&1; then echo -e \" - unloading module \"$l_mname\"\" modprobe -r \"$l_mname\" fi \\# Remediate deny list if ! modprobe --showconfig | grep -Pq -- \"^\\h*blacklist\\h+$l_mname\b\"; then echo -e \" - deny listing \"$l_mname\"\" echo -e \"blacklist $l_mname\" >> /etc/modprobe.d/\"$l_mname\".conf fi else echo -e \" - Nothing to remediate\\n - Module \"$l_mname\" doesn't exist on the system\" fi }.",
+            "compliance": {
+              "cis_csc_v8": "4.8",
+              "soc_2": "CC6.3,CC6.6",
+              "pci_dss_4": {
+                "0": "1.2.5,2.2.4,6.4.1"
+              },
+              "nist_sp_800-53": "CM-7",
+              "pci_dss_3": {
+                "2": {
+                  "1": "1.1.6,1.2.1,2.2.2,2.2.5"
+                }
+              },
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1005",
+              "cis": "1.1.1.2",
+              "cmmc_v2": {
+                "0": "CM.L2-3.4.7,CM.L2-3.4.8,SC.L2-3.13.6"
+              },
+              "iso_27001-2013": "A.13.1.3",
+              "cis_csc_v7": "9.2",
+              "mitre_mitigations": "M1050"
+            },
+            "description": "The udf filesystem type is the universal disk format used to implement ISO/IEC 13346 and ECMA-167 specifications. This is an open vendor filesystem type for data storage on a broad range of media. This filesystem type is necessary to support writing DVDs and newer optical disc formats.",
+            "id": "31001",
+            "title": "Ensure mounting of udf filesystems is disabled.",
+            "rationale": "Removing support for unneeded filesystem types reduces the local attack surface of the system. If this filesystem type is not needed, disable it.",
+            "command": [
+              "modprobe -n -v udf"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "4.8"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-7"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure mounting of udf filesystems is disabled.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1005"
+        ],
+        "cis": [
+          "1.1.1.2"
+        ],
+        "iso_27001-2013": [
+          "A.13.1.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1050"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 2,
+        "soc_2": [
+          "CC6.3",
+          "CC6.6"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "9.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.513Z",
+      "location": "sca",
+      "id": "1758331617.6176",
+      "timestamp": "2025-09-20T01:26:57.513+0000"
+    },
+    "sort": [
+      1758331617513
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Sqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "First ensure that systemd is correctly configured to ensure that /tmp will be mounted at boot time. # systemctl unmask tmp.mount For specific configuration requirements of the /tmp mount for your environment, modify /etc/fstab. Example of using tmpfs with specific mount options: tmpfs /tmp tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0 Example of using a volume or disk with specific mount options. The source location of the volume or disk will vary depending on your environment. <device> /tmp <fstype> defaults,nodev,nosuid,noexec 0 0.",
+            "references": "https://www.freedesktop.org/wiki/Software/systemd/APIFileSystems/,https://www.freedesktop.org/software/systemd/man/systemd-fstab-generator.html",
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.2.5,2.2.4,6.4.1"
+              },
+              "cis_csc_v8": "4.8",
+              "soc_2": "CC6.3,CC6.6",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "1.1.6,1.2.1,2.2.2,2.2.5"
+                }
+              },
+              "nist_sp_800-53": "CM-7",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.2.1",
+              "cmmc_v2": {
+                "0": "CM.L2-3.4.7,CM.L2-3.4.8,SC.L2-3.13.6"
+              },
+              "iso_27001-2013": "A.13.1.3",
+              "cis_csc_v7": "9.2",
+              "mitre_mitigations": "M1022"
+            },
+            "description": "The /tmp directory is a world-writable directory used for temporary storage by all users and some applications.",
+            "id": "31002",
+            "title": "Ensure /tmp is a separate partition.",
+            "rationale": "Making /tmp its own file system allows an administrator to set additional mount options such as the noexec option on the mount, making /tmp useless for an attacker to install executable code. It would also prevent an attacker from establishing a hard link to a system setuid program and wait for it to be updated. Once the program was updated, the hard link would be broken and the attacker would have his own copy of the program. If the program happened to have a security vulnerability, the attacker could continue to exploit the known flaw. Since the /tmp directory is intended to be world-writable, there is a risk of resource exhaustion if it is not bound to a separate partition. This can be accomplished by either mounting tmpfs to /tmp, or creating a separate partition for /tmp.",
+            "command": [
+              "findmnt --kernel /tmp",
+              "systemctl is-enabled tmp.mount"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "4.8"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-7"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure /tmp is a separate partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.2.1"
+        ],
+        "iso_27001-2013": [
+          "A.13.1.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 1,
+        "soc_2": [
+          "CC6.3",
+          "CC6.6"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "9.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.523Z",
+      "location": "sca",
+      "id": "1758331617.11333",
+      "timestamp": "2025-09-20T01:26:57.523+0000"
+    },
+    "sort": [
+      1758331617523
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "S6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /tmp partition. Example: <device> /tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /tmp with the configured options: # mount -o remount /tmp.",
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.2.5,2.2.4,6.4.1"
+              },
+              "cis_csc_v8": "4.8",
+              "soc_2": "CC6.3,CC6.6",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "1.1.6,1.2.1,2.2.2,2.2.5"
+                }
+              },
+              "nist_sp_800-53": "CM-7",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1200",
+              "cis": "1.1.2.2",
+              "cmmc_v2": {
+                "0": "CM.L2-3.4.7,CM.L2-3.4.8,SC.L2-3.13.6"
+              },
+              "iso_27001-2013": "A.13.1.3",
+              "cis_csc_v7": "9.2",
+              "mitre_mitigations": "M1022"
+            },
+            "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+            "id": "31003",
+            "title": "Ensure nodev option set on /tmp partition.",
+            "rationale": "Since the /tmp filesystem is not intended to support devices, set this option to ensure that users cannot create a block or character special devices in /tmp.",
+            "command": [
+              "findmnt --kernel /tmp"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "4.8"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-7"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nodev option set on /tmp partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1200"
+        ],
+        "cis": [
+          "1.1.2.2"
+        ],
+        "iso_27001-2013": [
+          "A.13.1.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 2,
+        "soc_2": [
+          "CC6.3",
+          "CC6.6"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "9.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.533Z",
+      "location": "sca",
+      "id": "1758331617.16557",
+      "timestamp": "2025-09-20T01:26:57.533+0000"
+    },
+    "sort": [
+      1758331617533
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "TKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /tmp partition. Example: <device> /tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /tmp with the configured options: # mount -o remount /tmp.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1204,T1204.002",
+              "cis": "1.1.2.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+            "id": "31004",
+            "title": "Ensure noexec option set on /tmp partition.",
+            "rationale": "Since the /tmp filesystem is only intended for temporary file storage, set this option to ensure that users cannot run executable binaries from /tmp.",
+            "command": [
+              "findmnt --kernel /tmp"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure noexec option set on /tmp partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1204",
+          "T1204.002"
+        ],
+        "cis": [
+          "1.1.2.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 3,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.543Z",
+      "location": "sca",
+      "id": "1758331617.19458",
+      "timestamp": "2025-09-20T01:26:57.543+0000"
+    },
+    "sort": [
+      1758331617543
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Taq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /tmp partition. Example: <device> /tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /tmp with the configured options: # mount -o remount /tmp.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1548,T1548.001",
+              "cis": "1.1.2.4",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+            "id": "31005",
+            "title": "Ensure nosuid option set on /tmp partition.",
+            "rationale": "Since the /tmp filesystem is only intended for temporary file storage, set this option to ensure that users cannot create setuid files in /tmp.",
+            "command": [
+              "findmnt --kernel /tmp"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nosuid option set on /tmp partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1548",
+          "T1548.001"
+        ],
+        "cis": [
+          "1.1.2.4"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 3,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.553Z",
+      "location": "sca",
+      "id": "1758331617.22555",
+      "timestamp": "2025-09-20T01:26:57.553+0000"
+    },
+    "sort": [
+      1758331617553
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Tqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var. For systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.",
+            "references": "http://tldp.org/HOWTO/LVM-HOWTO/",
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "cis_csc_v8": "3.3",
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-5,AC-6",
+              "mitre_tactics": "TA0006",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.3.1",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The /var directory is used by daemons and other system services to temporarily store dynamic data. Some directories created by these processes may be world-writable.",
+            "id": "31006",
+            "title": "Ensure separate partition exists for /var.",
+            "rationale": "The reasoning for mounting /var on a separate partition is as follows. Protection from resource exhaustion The default installation only creates a single / partition. Since the /var directory may contain world-writable files and directories, there is a risk of resource exhaustion. It will essentially have the whole disk available to fill up and impact the system as a whole. In addition, other operations on the system could fill up the disk unrelated to /var and cause unintended behavior across the system as the disk is full. See man auditd.conf for details. Fine grained control over the mount Configuring /var as its own file system allows an administrator to set additional mount options such as noexec/nosuid/nodev. These options limits an attackers ability to create exploits on the system. Other options allow for specific behavior. See man mount for exact details regarding filesystem-independent and filesystem-specific options. Protection from exploitation An example of exploiting /var may be an attacker establishing a hard-link to a system setuid program and wait for it to be updated. Once the program was updated, the hard-link would be broken and the attacker would have his own copy of the program. If the program happened to have a security vulnerability, the attacker could continue to exploit the known flaw.",
+            "command": [
+              "findmnt --kernel /var"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-5",
+          "AC-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure separate partition exists for /var.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0006"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.3.1"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 4,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.564Z",
+      "location": "sca",
+      "id": "1758331617.25626",
+      "timestamp": "2025-09-20T01:26:57.564+0000"
+    },
+    "sort": [
+      1758331617564
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "T6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /var partition. Example: <device> /var <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var with the configured options: # mount -o remount /var.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1200",
+              "cis": "1.1.3.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+            "id": "31007",
+            "title": "Ensure nodev option set on /var partition.",
+            "rationale": "Since the /var filesystem is not intended to support devices, set this option to ensure that users cannot create a block or character special devices in /var.",
+            "command": [
+              "findmnt --kernel /var"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nodev option set on /var partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1200"
+        ],
+        "cis": [
+          "1.1.3.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 5,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.574Z",
+      "location": "sca",
+      "id": "1758331617.31248",
+      "timestamp": "2025-09-20T01:26:57.574+0000"
+    },
+    "sort": [
+      1758331617574
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "UKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /var partition. Example: <device> /var <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var with the configured options: # mount -o remount /var.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1548,T1548.001",
+              "cis": "1.1.3.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+            "id": "31008",
+            "title": "Ensure nosuid option set on /var partition.",
+            "rationale": "Since the /var filesystem is only intended for variable files such as logs, set this option to ensure that users cannot create setuid files in /var.",
+            "command": [
+              "findmnt --kernel /var"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nosuid option set on /var partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1548",
+          "T1548.001"
+        ],
+        "cis": [
+          "1.1.3.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 6,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.584Z",
+      "location": "sca",
+      "id": "1758331617.34327",
+      "timestamp": "2025-09-20T01:26:57.584+0000"
+    },
+    "sort": [
+      1758331617584
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Uaq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/tmp. For systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.",
+            "references": "http://tldp.org/HOWTO/LVM-HOWTO/",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-5,AC-6",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.4.1",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The /var/tmp directory is a world-writable directory used for temporary storage by all users and some applications. Temporary files residing in /var/tmp are to be preserved between reboots.",
+            "id": "31009",
+            "title": "Ensure separate partition exists for /var/tmp.",
+            "rationale": "The reasoning for mounting /var/tmp on a separate partition is as follows. Protection from resource exhaustion The default installation only creates a single / partition. Since the /var/tmp directory may contain world-writable files and directories, there is a risk of resource exhaustion. It will essentially have the whole disk available to fill up and impact the system as a whole. In addition, other operations on the system could fill up the disk unrelated to /var/tmp and cause potential disruption to daemons as the disk is full. Fine grained control over the mount Configuring /var/tmp as its own file system allows an administrator to set additional mount options such as noexec/nosuid/nodev. These options limits an attackers ability to create exploits on the system. Other options allow for specific behavior. See man mount for exact details regarding filesystem-independent and filesystem-specific options. Protection from exploitation An example of exploiting /var/tmp may be an attacker establishing a hard-link to a system setuid program and wait for it to be updated. Once the program was updated, the hard-link would be broken and the attacker would have his own copy of the program. If the program happened to have a security vulnerability, the attacker could continue to exploit the known flaw.",
+            "command": [
+              "findmnt --kernel /var/tmp"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-5",
+          "AC-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure separate partition exists for /var/tmp.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.4.1"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 7,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.594Z",
+      "location": "sca",
+      "id": "1758331617.37408",
+      "timestamp": "2025-09-20T01:26:57.594+0000"
+    },
+    "sort": [
+      1758331617594
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Uqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /var/tmp partition. Example: <device> /var/tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/tmp with the configured options: # mount -o remount /var/tmp.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1204,T1204.002",
+              "cis": "1.1.4.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+            "id": "31010",
+            "title": "Ensure noexec option set on /var/tmp partition.",
+            "rationale": "Since the /var/tmp filesystem is only intended for temporary file storage, set this option to ensure that users cannot run executable binaries from /var/tmp.",
+            "command": [
+              "findmnt --kernel /var/tmp"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure noexec option set on /var/tmp partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1204",
+          "T1204.002"
+        ],
+        "cis": [
+          "1.1.4.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 8,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.604Z",
+      "location": "sca",
+      "id": "1758331617.43140",
+      "timestamp": "2025-09-20T01:26:57.604+0000"
+    },
+    "sort": [
+      1758331617604
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "U6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /var/tmp partition. Example: <device> /var/tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/tmp with the configured options: # mount -o remount /var/tmp.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1548,T1548.001",
+              "cis": "1.1.4.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+            "id": "31011",
+            "title": "Ensure nosuid option set on /var/tmp partition.",
+            "rationale": "Since the /var/tmp filesystem is only intended for temporary file storage, set this option to ensure that users cannot create setuid files in /var/tmp.",
+            "command": [
+              "findmnt --kernel /var/tmp"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nosuid option set on /var/tmp partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1548",
+          "T1548.001"
+        ],
+        "cis": [
+          "1.1.4.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 9,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.614Z",
+      "location": "sca",
+      "id": "1758331617.46309",
+      "timestamp": "2025-09-20T01:26:57.614+0000"
+    },
+    "sort": [
+      1758331617614
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "VKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /var/tmp partition. Example: <device> /var/tmp <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/tmp with the configured options: # mount -o remount /var/tmp.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.4.4",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+            "id": "31012",
+            "title": "Ensure nodev option set on /var/tmp partition.",
+            "rationale": "Since the /var/tmp filesystem is not intended to support devices, set this option to ensure that users cannot create a block or character special devices in /var/tmp.",
+            "command": [
+              "findmnt --kernel /var/tmp"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nodev option set on /var/tmp partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.4.4"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 10,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.624Z",
+      "location": "sca",
+      "id": "1758331617.49452",
+      "timestamp": "2025-09-20T01:26:57.624+0000"
+    },
+    "sort": [
+      1758331617624
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Vaq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/log . For systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.",
+            "references": "http://tldp.org/HOWTO/LVM-HOWTO/",
+            "compliance": {
+              "cis_csc_v8": "8.3",
+              "soc_2": "A1.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "10.7"
+                }
+              },
+              "nist_sp_800-53": "CM-6",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.5.1",
+              "iso_27001-2013": "A.12.4.1",
+              "cis_csc_v7": "6.4",
+              "mitre_mitigations": "M1022"
+            },
+            "description": "The /var/log directory is used by system services to store log data.",
+            "id": "31013",
+            "title": "Ensure separate partition exists for /var/log.",
+            "rationale": "The reasoning for mounting /var/log on a separate partition is as follows. Protection from resource exhaustion The default installation only creates a single / partition. Since the /var/log directory contains log files which can grow quite large, there is a risk of resource exhaustion. It will essentially have the whole disk available to fill up and impact the system as a whole. Fine grained control over the mount Configuring /var/log as its own file system allows an administrator to set additional mount options such as noexec/nosuid/nodev. These options limit an attackers ability to create exploits on the system. Other options allow for specific behavior. See man mount for exact details regarding filesystem-independent and filesystem-specific options. Protection of log data As /var/log contains log files, care should be taken to ensure the security and integrity of the data and mount point.",
+            "command": [
+              "findmnt --kernel /var/log"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "8.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure separate partition exists for /var/log.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.5.1"
+        ],
+        "iso_27001-2013": [
+          "A.12.4.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 11,
+        "soc_2": [
+          "A1.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "6.4"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.635Z",
+      "location": "sca",
+      "id": "1758331617.52623",
+      "timestamp": "2025-09-20T01:26:57.635+0000"
+    },
+    "sort": [
+      1758331617635
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Vqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /var/log partition. Example: <device> /var/log <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/log with the configured options: # mount -o remount /var/log.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1200",
+              "cis": "1.1.5.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1038",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+            "id": "31014",
+            "title": "Ensure nodev option set on /var/log partition.",
+            "rationale": "Since the /var/log filesystem is not intended to support devices, set this option to ensure that users cannot create a block or character special devices in /var/log.",
+            "command": [
+              "findmnt --kernel /var/log"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nodev option set on /var/log partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1200"
+        ],
+        "cis": [
+          "1.1.5.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1038"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 12,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.645Z",
+      "location": "sca",
+      "id": "1758331617.56793",
+      "timestamp": "2025-09-20T01:26:57.645+0000"
+    },
+    "sort": [
+      1758331617645
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "V6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /var/log partition. Example: <device> /var/log <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/log with the configured options: # mount -o remount /var/log.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1204,T1204.002",
+              "cis": "1.1.5.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+            "id": "31015",
+            "title": "Ensure noexec option set on /var/log partition.",
+            "rationale": "Since the /var/log filesystem is only intended for log files, set this option to ensure that users cannot run executable binaries from /var/log.",
+            "command": [
+              "findmnt --kernel /var/log"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure noexec option set on /var/log partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1204",
+          "T1204.002"
+        ],
+        "cis": [
+          "1.1.5.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 13,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.655Z",
+      "location": "sca",
+      "id": "1758331617.59944",
+      "timestamp": "2025-09-20T01:26:57.655+0000"
+    },
+    "sort": [
+      1758331617655
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "WKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /var/log partition. Example: <device> /var/log <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/log with the configured options: # mount -o remount /var/log.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1548,T1548.001",
+              "cis": "1.1.5.4",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+            "id": "31016",
+            "title": "Ensure nosuid option set on /var/log partition.",
+            "rationale": "Since the /var/log filesystem is only intended for log files, set this option to ensure that users cannot create setuid files in /var/log.",
+            "command": [
+              "findmnt --kernel /var/log"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nosuid option set on /var/log partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1548",
+          "T1548.001"
+        ],
+        "cis": [
+          "1.1.5.4"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 14,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.665Z",
+      "location": "sca",
+      "id": "1758331617.63087",
+      "timestamp": "2025-09-20T01:26:57.665+0000"
+    },
+    "sort": [
+      1758331617665
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Waq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /var/log/audit. For systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.",
+            "references": "http://tldp.org/HOWTO/LVM-HOWTO/",
+            "compliance": {
+              "cis_csc_v8": "8.3",
+              "soc_2": "A1.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "10.7"
+                }
+              },
+              "nist_sp_800-53": "CM-6",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.6.1",
+              "iso_27001-2013": "A.12.4.1",
+              "cis_csc_v7": "6.4",
+              "mitre_mitigations": "M1022"
+            },
+            "description": "The auditing daemon, auditd, stores log data in the /var/log/audit directory.",
+            "id": "31017",
+            "title": "Ensure separate partition exists for /var/log/audit.",
+            "rationale": "The reasoning for mounting /var/log/audit on a separate partition is as follows. Protection from resource exhaustion The default installation only creates a single / partition. Since the /var/log/audit directory contains the audit.log file which can grow quite large, there is a risk of resource exhaustion. It will essentially have the whole disk available to fill up and impact the system as a whole. In addition, other operations on the system could fill up the disk unrelated to /var/log/audit and cause auditd to trigger it's space_left_action as the disk is full. See man auditd.conf for details. Fine grained control over the mount Configuring /var/log/audit as its own file system allows an administrator to set additional mount options such as noexec/nosuid/nodev. These options limit an attacker's ability to create exploits on the system. Other options allow for specific behavior. See man mount for exact details regarding filesystem-independent and filesystem-specific options. Protection of audit data As /var/log/audit contains audit logs, care should be taken to ensure the security and integrity of the data and mount point.",
+            "command": [
+              "findmnt --kernel /var/log/audit"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "8.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure separate partition exists for /var/log/audit.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.6.1"
+        ],
+        "iso_27001-2013": [
+          "A.12.4.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 15,
+        "soc_2": [
+          "A1.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "6.4"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.675Z",
+      "location": "sca",
+      "id": "1758331617.66204",
+      "timestamp": "2025-09-20T01:26:57.675+0000"
+    },
+    "sort": [
+      1758331617675
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Wqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /var partition. Example: <device> /var/log/audit <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/log/audit with the configured options: # mount -o remount /var/log/audit.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-5,AC-6",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1204,T1204.002",
+              "cis": "1.1.6.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+            "id": "31018",
+            "title": "Ensure noexec option set on /var/log/audit partition.",
+            "rationale": "Since the /var/log/audit filesystem is only intended for audit logs, set this option to ensure that users cannot run executable binaries from /var/log/audit.",
+            "command": [
+              "findmnt --kernel /var/log/audit"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-5",
+          "AC-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure noexec option set on /var/log/audit partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1204",
+          "T1204.002"
+        ],
+        "cis": [
+          "1.1.6.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 16,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.685Z",
+      "location": "sca",
+      "id": "1758331617.70918",
+      "timestamp": "2025-09-20T01:26:57.685+0000"
+    },
+    "sort": [
+      1758331617685
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "W6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /var/log/audit partition. Example: <device> /var/log/audit <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/log/audit with the configured options: # mount -o remount /var/log/audit.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1200",
+              "cis": "1.1.6.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+            "id": "31019",
+            "title": "Ensure nodev option set on /var/log/audit partition.",
+            "rationale": "Since the /var/log/audit filesystem is not intended to support devices, set this option to ensure that users cannot create a block or character special devices in /var/log/audit.",
+            "command": [
+              "findmnt --kernel /var/log/audit"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nodev option set on /var/log/audit partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1200"
+        ],
+        "cis": [
+          "1.1.6.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 17,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.695Z",
+      "location": "sca",
+      "id": "1758331617.74227",
+      "timestamp": "2025-09-20T01:26:57.695+0000"
+    },
+    "sort": [
+      1758331617695
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "XKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /var/log/audit partition. Example: <device> /var/log/audit <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /var/log/audit with the configured options: # mount -o remount /var/log/audit.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1548,T1548.001",
+              "cis": "1.1.6.4",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+            "id": "31020",
+            "title": "Ensure nosuid option set on /var/log/audit partition.",
+            "rationale": "Since the /var/log/audit filesystem is only intended for variable files such as logs, set this option to ensure that users cannot create setuid files in /var/log/audit.",
+            "command": [
+              "findmnt --kernel /var/log/audit"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nosuid option set on /var/log/audit partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1548",
+          "T1548.001"
+        ],
+        "cis": [
+          "1.1.6.4"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 18,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.705Z",
+      "location": "sca",
+      "id": "1758331617.77486",
+      "timestamp": "2025-09-20T01:26:57.705+0000"
+    },
+    "sort": [
+      1758331617705
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Xaq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "For new installations, during installation create a custom partition setup and specify a separate partition for /home. For systems that were previously installed, create a new partition and configure /etc/fstab as appropriate.",
+            "references": "http://tldp.org/HOWTO/LVM-HOWTO/",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "CM-6",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.7.1",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1038",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The /home directory is used to support disk storage needs of local users.",
+            "id": "31021",
+            "title": "Ensure separate partition exists for /home.",
+            "rationale": "The reasoning for mounting /home on a separate partition is as follows. Protection from resource exhaustion The default installation only creates a single / partition. Since the /home directory contains user generated data, there is a risk of resource exhaustion. It will essentially have the whole disk available to fill up and impact the system as a whole. In addition, other operations on the system could fill up the disk unrelated to /home and impact all local users. Fine grained control over the mount Configuring /home as its own file system allows an administrator to set additional mount options such as noexec/nosuid/nodev. These options limit an attacker's ability to create exploits on the system. In the case of /home options such as usrquota/grpquota may be considered to limit the impact that users can have on each other with regards to disk resource exhaustion. Other options allow for specific behavior. See man mount for exact details regarding filesystem-independent and filesystem-specific options. Protection of user data As /home contains user data, care should be taken to ensure the security and integrity of the data and mount point.",
+            "command": [
+              "findmnt --kernel /home"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "CM-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure separate partition exists for /home.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.7.1"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1038"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 19,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.716Z",
+      "location": "sca",
+      "id": "1758331617.80747",
+      "timestamp": "2025-09-20T01:26:57.716+0000"
+    },
+    "sort": [
+      1758331617716
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Xqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /home partition. Example: <device> /home <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /home with the configured options: # mount -o remount /home.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1200",
+              "cis": "1.1.7.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1038",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+            "id": "31022",
+            "title": "Ensure nodev option set on /home partition.",
+            "rationale": "Since the /home filesystem is not intended to support devices, set this option to ensure that users cannot create a block or character special devices in /var.",
+            "command": [
+              "findmnt --kernel /home"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nodev option set on /home partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1200"
+        ],
+        "cis": [
+          "1.1.7.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1038"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 20,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.726Z",
+      "location": "sca",
+      "id": "1758331617.85838",
+      "timestamp": "2025-09-20T01:26:57.726+0000"
+    },
+    "sort": [
+      1758331617726
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "X6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /home partition. Example: <device> /home <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /home with the configured options: # mount -o remount /home.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1548,T1548.001",
+              "cis": "1.1.7.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+            "id": "31023",
+            "title": "Ensure nosuid option set on /home partition.",
+            "rationale": "Since the /home filesystem is only intended for user file storage, set this option to ensure that users cannot create setuid files in /home.",
+            "command": [
+              "findmnt --kernel /home"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nosuid option set on /home partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1548",
+          "T1548.001"
+        ],
+        "cis": [
+          "1.1.7.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 21,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.736Z",
+      "location": "sca",
+      "id": "1758331617.88933",
+      "timestamp": "2025-09-20T01:26:57.736+0000"
+    },
+    "sort": [
+      1758331617736
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "YKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "For specific configuration requirements of the /dev/shm mount for your environment, modify /etc/fstab. Example of using tmpfs with specific mount options: tmpfs /dev/shm tmpfs defaults,rw,nosuid,nodev,noexec,relatime,size=2G 0 0.",
+            "references": "https://www.freedesktop.org/wiki/Software/systemd/APIFileSystems/,https://www.freedesktop.org/software/systemd/man/systemd-fstab-generator.html",
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.2.5,2.2.4,6.4.1"
+              },
+              "cis_csc_v8": "4.8",
+              "soc_2": "CC6.3,CC6.6",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "1.1.6,1.2.1,2.2.2,2.2.5"
+                }
+              },
+              "nist_sp_800-53": "CM-7",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1499,T1499.001",
+              "cis": "1.1.8.1",
+              "cmmc_v2": {
+                "0": "CM.L2-3.4.7,CM.L2-3.4.8,SC.L2-3.13.6"
+              },
+              "iso_27001-2013": "A.13.1.3",
+              "cis_csc_v7": "9.2",
+              "mitre_mitigations": "M1022"
+            },
+            "description": "The /dev/shm directory is a world-writable directory that can function as shared memory that facilitates inter process communication (IPC).",
+            "id": "31024",
+            "title": "Ensure /dev/shm is a separate partition.",
+            "rationale": "Making /dev/shm its own file system allows an administrator to set additional mount options such as the noexec option on the mount, making /dev/shm useless for an attacker to install executable code. It would also prevent an attacker from establishing a hard link to a system setuid program and wait for it to be updated. Once the program was updated, the hard link would be broken and the attacker would have his own copy of the program. If the program happened to have a security vulnerability, the attacker could continue to exploit the known flaw. This can be accomplished by mounting tmpfs to /dev/shm.",
+            "command": [
+              "findmnt --kernel /dev/shm"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "4.8"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-7"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure /dev/shm is a separate partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1499",
+          "T1499.001"
+        ],
+        "cis": [
+          "1.1.8.1"
+        ],
+        "iso_27001-2013": [
+          "A.13.1.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 4,
+        "soc_2": [
+          "CC6.3",
+          "CC6.6"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "9.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.746Z",
+      "location": "sca",
+      "id": "1758331617.92012",
+      "timestamp": "2025-09-20T01:26:57.746+0000"
+    },
+    "sort": [
+      1758331617746
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Yaq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Edit the /etc/fstab file and add nodev to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information. Run the following command to remount /dev/shm using the updated options from /etc/fstab: # mount -o remount /dev/shm.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1200",
+              "cis": "1.1.8.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nodev mount option specifies that the filesystem cannot contain special devices.",
+            "id": "31025",
+            "title": "Ensure nodev option set on /dev/shm partition.",
+            "rationale": "Since the /dev/shm filesystem is not intended to support devices, set this option to ensure that users cannot attempt to create special devices in /dev/shm partitions.",
+            "command": [
+              "findmnt --kernel /dev/shm"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nodev option set on /dev/shm partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1200"
+        ],
+        "cis": [
+          "1.1.8.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 5,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.756Z",
+      "location": "sca",
+      "id": "1758331617.96192",
+      "timestamp": "2025-09-20T01:26:57.756+0000"
+    },
+    "sort": [
+      1758331617756
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Yqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/fstab file and add noexec to the fourth field (mounting options) for the /dev/shm partition. Example: <device> /dev/shm <fstype> defaults,rw,nosuid,nodev,noexec,relatime 0 0 Run the following command to remount /dev/shm with the configured options: # mount -o remount /dev/shm NOTE It is recommended to use tmpfs as the device/filesystem type as /dev/shm is used as shared memory space by applications.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1204,T1204.002",
+              "cis": "1.1.8.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The noexec mount option specifies that the filesystem cannot contain executable binaries.",
+            "id": "31026",
+            "title": "Ensure noexec option set on /dev/shm partition.",
+            "rationale": "Setting this option on a file system prevents users from executing programs from shared memory. This deters users from introducing potentially malicious software on the system.",
+            "command": [
+              "findmnt --kernel /dev/shm"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure noexec option set on /dev/shm partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1204",
+          "T1204.002"
+        ],
+        "cis": [
+          "1.1.8.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 22,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.766Z",
+      "location": "sca",
+      "id": "1758331617.99313",
+      "timestamp": "2025-09-20T01:26:57.766+0000"
+    },
+    "sort": [
+      1758331617766
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Y6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Edit the /etc/fstab file and add nosuid to the fourth field (mounting options) for the /dev/shm partition. See the fstab(5) manual page for more information. Run the following command to remount /dev/shm using the updated options from /etc/fstab: # mount -o remount /dev/shm.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1548,T1548.001",
+              "cis": "1.1.8.4",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1038",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The nosuid mount option specifies that the filesystem cannot contain setuid files.",
+            "id": "31027",
+            "title": "Ensure nosuid option set on /dev/shm partition.",
+            "rationale": "Setting this option on a file system prevents users from introducing privileged programs onto the system and allowing non-root users to execute them.",
+            "command": [
+              "findmnt --kernel /dev/shm"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure nosuid option set on /dev/shm partition.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1548",
+          "T1548.001"
+        ],
+        "cis": [
+          "1.1.8.4"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1038"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 6,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.776Z",
+      "location": "sca",
+      "id": "1758331617.102770",
+      "timestamp": "2025-09-20T01:26:57.776+0000"
+    },
+    "sort": [
+      1758331617776
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "ZKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit or create a file in the /etc/modprobe.d/ directory ending in .conf Example: vim /etc/modprobe.d/usb_storage.conf and add the following line: install usb-storage /bin/true Run the following command to unload the usb-storage module: rmmod usb-storage.",
+            "compliance": {
+              "cis_csc_v8": "10.3",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "9.7.1"
+                }
+              },
+              "hipaa": "164.310(d)(1)",
+              "nist_sp_800-53": "SC-18(4)",
+              "mitre_tactics": "TA0001,TA0010",
+              "mitre_techniques": "T1091",
+              "cis": "1.1.9",
+              "cmmc_v2": {
+                "0": "MP.L2-3.8.7"
+              },
+              "iso_27001-2013": "A.8.3.1",
+              "cis_csc_v7": "13.7",
+              "mitre_mitigations": "M1034"
+            },
+            "description": "USB storage provides a means to transfer and store files ensuring persistence and availability of the files independent of network connection status. Its popularity and utility has led to USB-based malware being a simple and common means for network infiltration and a first step to establishing a persistent threat within a networked environment.",
+            "id": "31028",
+            "title": "Disable USB Storage.",
+            "rationale": "Restricting USB access on the system will decrease the physical attack surface for a device and diminish the possible vectors to introduce malware.",
+            "command": [
+              "modprobe -n -v usb-storage"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "10.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.310(d)(1)"
+        ],
+        "nist_sp_800-53": [
+          "SC-18(4)"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Disable USB Storage.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0001",
+          "TA0010"
+        ],
+        "mitre_techniques": [
+          "T1091"
+        ],
+        "cis": [
+          "1.1.9"
+        ],
+        "iso_27001-2013": [
+          "A.8.3.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1034"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 23,
+        "id": "19007",
+        "cis_csc_v7": [
+          "13.7"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.787Z",
+      "location": "sca",
+      "id": "1758331617.105878",
+      "timestamp": "2025-09-20T01:26:57.787+0000"
+    },
+    "sort": [
+      1758331617787
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Zaq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit /etc/dnf/dnf.conf and set gpgcheck=1 in the [main] section. Example: # sed -i 's/^gpgcheck\\s*=\\s*.*/gpgcheck=1/' /etc/dnf/dnf.conf Edit any failing files in /etc/yum.repos.d/* and set all instances starting with gpgcheck to 1. Example: # find /etc/yum.repos.d/ -name \"*.repo\" -exec echo \"Checking:\" {} \\; -exec sed -i 's/^gpgcheck\\s*=\\s*.*/gpgcheck=1/' {} \\;.",
+            "file": [
+              "/etc/dnf/dnf.conf"
+            ],
+            "compliance": {
+              "cis_csc_v8": "7.3",
+              "soc_2": "CC7.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "6.2"
+                }
+              },
+              "nist_sp_800-53": "SI-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1195,T1195.001",
+              "cis": "1.2.2",
+              "cmmc_v2": {
+                "0": "SI.L1-3.14.1"
+              },
+              "cis_csc_v7": "3.4"
+            },
+            "description": "The gpgcheck option, found in the main section of the /etc/dnf/dnf.conf and individual /etc/yum.repos.d/* files, determines if an RPM package's signature is checked prior to its installation.",
+            "id": "31029",
+            "title": "Ensure gpgcheck is globally activated.",
+            "rationale": "It is important to ensure that an RPM's package signature is always checked prior to installation to ensure that the software is obtained from a trusted source."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "7.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "SI-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure gpgcheck is globally activated.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1195",
+          "T1195.001"
+        ],
+        "cis": [
+          "1.2.2"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 24,
+        "soc_2": [
+          "CC7.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "3.4"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.797Z",
+      "location": "sca",
+      "id": "1758331617.109086",
+      "timestamp": "2025-09-20T01:26:57.797+0000"
+    },
+    "sort": [
+      1758331617797
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Zqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Run the following command to install AIDE: # dnf install aide Configure AIDE as appropriate for your environment. Consult the AIDE documentation for options. Initialize AIDE: Run the following commands: # aide --init # mv /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz.",
+            "references": "http://aide.sourceforge.net/stable/manual.html",
+            "compliance": {
+              "cis_csc_v8": "3.14",
+              "hipaa": "164.312(b),164.312(c)(1),164.312(c)(2)",
+              "nist_sp_800-53": "AU-2",
+              "mitre_tactics": "TA0001",
+              "mitre_techniques": "T1565,T1565.001",
+              "cis": "1.3.1",
+              "cmmc_v2": {
+                "0": "AC.L2-3.1.7"
+              },
+              "iso_27001-2013": "A.12.4.3",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "10.2.1,10.2.1.1"
+              },
+              "soc_2": "CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "10.2.1,11.5"
+                }
+              },
+              "cis_csc_v7": "14.9"
+            },
+            "description": "Advanced Intrusion Detection Environment (AIDE) is a intrusion detection tool that uses predefined rules to check the integrity of files and directories in the Linux operating system. AIDE has its own database to check the integrity of files and directories. AIDE takes a snapshot of files and directories including modification times, permissions, and file hashes which can then be used to compare against the current state of the filesystem to detect modifications to the system.",
+            "id": "31030",
+            "title": "Ensure AIDE is installed.",
+            "rationale": "By monitoring the filesystem state compromised files can be detected to prevent or limit the exposure of accidental or malicious misconfigurations or modified binaries.",
+            "command": [
+              "rpm -q aide"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.14"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.312(b)",
+          "164.312(c)(1)",
+          "164.312(c)(2)"
+        ],
+        "nist_sp_800-53": [
+          "AU-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure AIDE is installed.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0001"
+        ],
+        "mitre_techniques": [
+          "T1565",
+          "T1565.001"
+        ],
+        "cis": [
+          "1.3.1"
+        ],
+        "iso_27001-2013": [
+          "A.12.4.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 25,
+        "soc_2": [
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.9"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.807Z",
+      "location": "sca",
+      "id": "1758331617.112112",
+      "timestamp": "2025-09-20T01:26:57.807+0000"
+    },
+    "sort": [
+      1758331617807
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "Z6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "not applicable",
+            "remediation": "If cron will be used to schedule and run aide check Run the following command: # crontab -u root -e Add the following line to the crontab: 0 5 * * * /usr/sbin/aide --check OR if aidecheck.service and aidecheck.timer will be used to schedule and run aide check: Create or edit the file /etc/systemd/system/aidecheck.service and add the following lines: [Unit] Description=Aide Check [Service] Type=simple ExecStart=/usr/sbin/aide --check [Install] WantedBy=multi-user.target Create or edit the file /etc/systemd/system/aidecheck.timer and add the following lines: [Unit] Description=Aide check every day at 5AM [Timer] OnCalendar=*-*-* 05:00:00 Unit=aidecheck.service [Install] WantedBy=multi-user.target Run the following commands: # chown root:root /etc/systemd/system/aidecheck.* # chmod 0644 /etc/systemd/system/aidecheck.* # systemctl daemon-reload # systemctl enable aidecheck.service # systemctl --now enable aidecheck.timer.",
+            "reason": "Invalid path or wrong permissions to run command 'crontab -u root -l'",
+            "references": "https://github.com/konstruktoid/hardening/blob/master/config/aidecheck.service,https://github.com/konstruktoid/hardening/blob/master/config/aidecheck.timer",
+            "compliance": {
+              "cis_csc_v8": "3.14",
+              "hipaa": "164.312(b),164.312(c)(1),164.312(c)(2)",
+              "nist_sp_800-53": "AU-2",
+              "mitre_tactics": "TA0040",
+              "mitre_techniques": "T1036,T1036.005",
+              "cis": "1.3.2",
+              "cmmc_v2": {
+                "0": "AC.L2-3.1.7"
+              },
+              "iso_27001-2013": "A.12.4.3",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "10.2.1,10.2.1.1"
+              },
+              "soc_2": "CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "10.2.1,11.5"
+                }
+              },
+              "cis_csc_v7": "14.9"
+            },
+            "description": "Periodic checking of the filesystem integrity is needed to detect changes to the filesystem.",
+            "id": "31031",
+            "title": "Ensure filesystem integrity is regularly checked.",
+            "rationale": "Periodic file checking allows the system administrator to determine on a regular basis if critical files have been changed in an unauthorized fashion.",
+            "command": [
+              "crontab -u root -l",
+              "grep -r aide /etc/cron.* /etc/crontab",
+              "systemctl is-enabled aidecheck.service",
+              "systemctl is-enabled aidecheck.timer",
+              "systemctl status aidecheck.timer"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.14"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.312(b)",
+          "164.312(c)(1)",
+          "164.312(c)(2)"
+        ],
+        "nist_sp_800-53": [
+          "AU-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure filesystem integrity is regularly checked.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0040"
+        ],
+        "mitre_techniques": [
+          "T1036",
+          "T1036.005"
+        ],
+        "cis": [
+          "1.3.2"
+        ],
+        "iso_27001-2013": [
+          "A.12.4.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 1,
+        "soc_2": [
+          "CC6.1"
+        ],
+        "id": "19009",
+        "cis_csc_v7": [
+          "14.9"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.817Z",
+      "location": "sca",
+      "id": "1758331617.115928",
+      "timestamp": "2025-09-20T01:26:57.817+0000"
+    },
+    "sort": [
+      1758331617817
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "aKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "not applicable",
+            "remediation": "Add or update the following selection lines for to a file ending in .conf in the /etc/aide.conf.d/ directory or to /etc/aide.conf to protect the integrity of the audit tools: # Audit Tools /sbin/auditctl p+i+n+u+g+s+b+acl+xattrs+sha512 /sbin/auditd p+i+n+u+g+s+b+acl+xattrs+sha512 /sbin/ausearch p+i+n+u+g+s+b+acl+xattrs+sha512 /sbin/aureport p+i+n+u+g+s+b+acl+xattrs+sha512 /sbin/autrace p+i+n+u+g+s+b+acl+xattrs+sha512 /sbin/augenrules p+i+n+u+g+s+b+acl+xattrs+sha512.",
+            "reason": "Could not open file '/etc/aide.conf'",
+            "file": [
+              "/etc/aide.conf"
+            ],
+            "compliance": {
+              "mitre_tactics": "TA0007",
+              "mitre_techniques": "T1070,T1070.002,T1083",
+              "cis": "1.3.3"
+            },
+            "description": "Audit tools include, but are not limited to, vendor-provided and open source audit tools needed to successfully view and manipulate audit information system activity and records. Audit tools include custom queries and report generators.",
+            "id": "31032",
+            "title": "Ensure cryptographic mechanisms are used to protect the integrity of audit tools.",
+            "rationale": "Protecting the integrity of the tools used for auditing purposes is a critical step toward ensuring the integrity of audit information. Audit information includes all information (e.g., audit records, audit settings, and audit reports) needed to successfully audit information system activity. Attackers may replace the audit tools or inject code into the existing tools with the purpose of providing the capability to hide or erase system activity from the audit logs. Audit tools should be cryptographically signed in order to provide the capability to identify when the audit tools have been modified, manipulated, or replaced. An example is a checksum hash of the file or files.",
+            "directory": [
+              "/etc/aide.conf.d"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure cryptographic mechanisms are used to protect the integrity of audit tools.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0007"
+        ],
+        "mitre_techniques": [
+          "T1070",
+          "T1070.002",
+          "T1083"
+        ],
+        "cis": [
+          "1.3.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 2,
+        "id": "19009"
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.827Z",
+      "location": "sca",
+      "id": "1758331617.121253",
+      "timestamp": "2025-09-20T01:26:57.827+0000"
+    },
+    "sort": [
+      1758331617827
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "aaq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Create an encrypted password with grub2-setpassword: # grub2-setpassword Enter password: <password> Confirm password: <password> Run the following command to update the grub2 configuration: # grub2-mkconfig -o \"$(dirname \"$(find /boot -type f \\( -name 'grubenv' -o -name 'grub.conf' -o -name 'grub.cfg' \\) -exec grep -Pl '^\\h*(kernelopts=|linux|kernel)' {} \\;)\")/grub.cfg\".",
+            "file": [
+              "/boot/grub2/grub.cfg"
+            ],
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0003",
+              "mitre_techniques": "T1542",
+              "cis": "1.4.1",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1046",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "Setting the boot loader password will require that anyone rebooting the system must enter a password before being able to set command line boot parameters.",
+            "id": "31033",
+            "title": "Ensure bootloader password is set.",
+            "rationale": "Requiring a boot password upon execution of the boot loader will prevent an unauthorized user from entering boot parameters or changing the boot partition. This prevents users from weakening security (e.g. turning off SELinux at boot time)."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure bootloader password is set.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0003"
+        ],
+        "mitre_techniques": [
+          "T1542"
+        ],
+        "cis": [
+          "1.4.1"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1046"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 7,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.837Z",
+      "location": "sca",
+      "id": "1758331617.125688",
+      "timestamp": "2025-09-20T01:26:57.837+0000"
+    },
+    "sort": [
+      1758331617837
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "aqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Run the following commands to set ownership and permissions on your grub configuration files: Run the following command to set ownership and permissions on grub.cfg: # chown root:root /boot/grub2/grub.cfg # chmod og-rwx /boot/grub2/grub.cfg Run the following command to set ownership and permissions on grubenv: # chown root:root /boot/grub2/grubenv # chmod u-x,og-rwx /boot/grub2/grubenv Run the following command to set ownership and permissions on user.cfg: # chown root:root /boot/grub2/user.cfg # chmod u-x,og-rwx /boot/grub2/user.cfg Note: This may require a re-boot to enable the change.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-5,AC-6",
+              "mitre_tactics": "TA0005,TA0007",
+              "mitre_techniques": "T1542",
+              "cis": "1.4.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The grub files contain information on boot settings and passwords for unlocking boot options. The grub2 configuration is usually grub.cfg. On newer grub2 systems the encrypted bootloader password is contained in user.cfg. If the system uses UEFI, /boot/efi is a vfat filesystem. The vfat filesystem itself doesn't have the concept of permissions but can be mounted under Linux with whatever permissions desired.",
+            "id": "31034",
+            "title": "Ensure permissions on bootloader config are configured.",
+            "rationale": "Setting the permissions to read and write for root only prevents non-root users from seeing the boot parameters or changing them. Non-root users who read the boot parameters may be able to identify weaknesses in security upon boot and be able to exploit them.",
+            "command": [
+              "stat -L /boot/grub/grub.cfg"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-5",
+          "AC-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure permissions on bootloader config are configured.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005",
+          "TA0007"
+        ],
+        "mitre_techniques": [
+          "T1542"
+        ],
+        "cis": [
+          "1.4.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 26,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.847Z",
+      "location": "sca",
+      "id": "1758331617.129309",
+      "timestamp": "2025-09-20T01:26:57.847+0000"
+    },
+    "sort": [
+      1758331617847
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "a6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit /etc/systemd/coredump.conf and edit or add the following line: Storage=none.",
+            "file": [
+              "/etc/systemd/coredump.conf"
+            ],
+            "references": "https://www.freedesktop.org/software/systemd/man/coredump.conf.html",
+            "compliance": {
+              "nist_sp_800-53": "CM-7",
+              "mitre_tactics": "TA0007",
+              "mitre_techniques": "T1005",
+              "cis": "1.5.3",
+              "cmmc_v2": {
+                "0": "AM.3.036"
+              },
+              "cis_csc_v7": "13.2",
+              "mitre_mitigations": "M1057"
+            },
+            "description": "A core dump is the memory of an executable program. It is generally used to determine why a program aborted. It can also be used to glean confidential information from a core file.",
+            "id": "31035",
+            "title": "Ensure core dump storage is disabled.",
+            "rationale": "A core dump includes a memory image taken at the time the operating system terminates an application. The memory image could contain sensitive data and is generally useful only for developers trying to debug problems."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-7"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure core dump storage is disabled.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0007"
+        ],
+        "mitre_techniques": [
+          "T1005"
+        ],
+        "cis": [
+          "1.5.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1057"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 27,
+        "id": "19007",
+        "cis_csc_v7": [
+          "13.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.857Z",
+      "location": "sca",
+      "id": "1758331617.134139",
+      "timestamp": "2025-09-20T01:26:57.857+0000"
+    },
+    "sort": [
+      1758331617857
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "bKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit or add the following line in /etc/systemd/coredump.conf: ProcessSizeMax=0.",
+            "file": [
+              "/etc/systemd/coredump.conf"
+            ],
+            "references": "https://www.freedesktop.org/software/systemd/man/coredump.conf.html",
+            "compliance": {
+              "nist_sp_800-53": "CM-6",
+              "mitre_tactics": "TA0007",
+              "mitre_techniques": "T1005",
+              "cis": "1.5.4",
+              "cmmc_v2": {
+                "0": "AM.3.036"
+              },
+              "cis_csc_v7": "13.2",
+              "mitre_mitigations": "M1057"
+            },
+            "description": "A core dump is the memory of an executable program. It is generally used to determine why a program aborted. It can also be used to glean confidential information from a core file.",
+            "id": "31036",
+            "title": "Ensure core dump backtraces are disabled.",
+            "rationale": "A core dump includes a memory image taken at the time the operating system terminates an application. The memory image could contain sensitive data and is generally useful only for developers trying to debug problems, increasing the risk to the system."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "CM-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure core dump backtraces are disabled.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0007"
+        ],
+        "mitre_techniques": [
+          "T1005"
+        ],
+        "cis": [
+          "1.5.4"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1057"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 28,
+        "id": "19007",
+        "cis_csc_v7": [
+          "13.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.868Z",
+      "location": "sca",
+      "id": "1758331617.136694",
+      "timestamp": "2025-09-20T01:26:57.868+0000"
+    },
+    "sort": [
+      1758331617868
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "baq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Run the following command to install SELinux: # dnf install libselinux.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0003",
+              "mitre_techniques": "T1068",
+              "cis": "1.6.1.1",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1026",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "SELinux provides Mandatory Access Control.",
+            "id": "31037",
+            "title": "Ensure SELinux is installed.",
+            "rationale": "Without a Mandatory Access Control system installed only the default Discretionary Access Control system will be available.",
+            "command": [
+              "rpm -q libselinux"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure SELinux is installed.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0003"
+        ],
+        "mitre_techniques": [
+          "T1068"
+        ],
+        "cis": [
+          "1.6.1.1"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1026"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 8,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.878Z",
+      "location": "sca",
+      "id": "1758331617.139334",
+      "timestamp": "2025-09-20T01:26:57.878+0000"
+    },
+    "sort": [
+      1758331617878
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "bqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Run the following command to remove the selinux=0 and enforcing=0 parameters: grubby --update-kernel ALL --remove-args 'selinux=0 enforcing=0' Run the following command to remove the selinux=0 and enforcing=0 parameters if they were created by the deprecated grub2-mkconfig command: grep -Prsq -- '\\h*([^#\\n\\r]+\\h+)?kernelopts=([^#\\n\\r]+\\h+)?(selinux|enforcing)=0\\b' /boot/grub2 /boot/efi && grub2-mkconfig -o \"$(grep -Prl -- '\\h*([^#\\n\\r]+\\h+)?kernelopts=([^#\\n\\r]+\\h+)?(selinux|enforcing)=0\\b' /boot/grub2 /boot/efi)\".",
+            "file": [
+              "/boot/grub2/grub.cfg",
+              "/boot/grub2/grubenv"
+            ],
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-5,AC-6",
+              "mitre_tactics": "TA0003",
+              "mitre_techniques": "T1068",
+              "cis": "1.6.1.2",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1026",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "Configure SELINUX to be enabled at boot time and verify that it has not been overwritten by the grub boot parameters.",
+            "id": "31038",
+            "title": "Ensure SELinux is not disabled in bootloader configuration.",
+            "rationale": "SELinux must be enabled at boot time in your grub configuration to ensure that the controls it provides are not overridden."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-5",
+          "AC-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure SELinux is not disabled in bootloader configuration.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0003"
+        ],
+        "mitre_techniques": [
+          "T1068"
+        ],
+        "cis": [
+          "1.6.1.2"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1026"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 9,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.888Z",
+      "location": "sca",
+      "id": "1758331617.141806",
+      "timestamp": "2025-09-20T01:26:57.888+0000"
+    },
+    "sort": [
+      1758331617888
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "b6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Edit the /etc/selinux/config file to set the SELINUXTYPE parameter: SELINUXTYPE=targeted.",
+            "file": [
+              "/etc/selinux/config"
+            ],
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "cis_csc_v8": "3.3",
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0003",
+              "mitre_techniques": "T1068",
+              "cis": "1.6.1.3",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "cis_csc_v7": "14.6"
+            },
+            "description": "Configure SELinux to meet or exceed the default targeted policy, which constrains daemons and system software only.",
+            "id": "31039",
+            "title": "Ensure SELinux policy is configured.",
+            "rationale": "Security configuration requirements vary from site to site. Some sites may mandate a policy that is stricter than the default policy, which is perfectly acceptable. This item is intended to ensure that at least the default recommendations are met.",
+            "command": [
+              "sestatus"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure SELinux policy is configured.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0003"
+        ],
+        "mitre_techniques": [
+          "T1068"
+        ],
+        "cis": [
+          "1.6.1.3"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 10,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.898Z",
+      "location": "sca",
+      "id": "1758331617.145591",
+      "timestamp": "2025-09-20T01:26:57.898+0000"
+    },
+    "sort": [
+      1758331617898
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "cKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Run one of the following commands to set SELinux's running mode: To set SELinux mode to Enforcing: # setenforce 1 OR To set SELinux mode to Permissive: # setenforce 0 Edit the /etc/selinux/config file to set the SELINUX parameter: For Enforcing mode: SELINUX=enforcing OR For Permissive mode: SELINUX=permissive.",
+            "references": "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-security-enhanced_linux-introduction-selinux_modes",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0003",
+              "mitre_techniques": "T1068,T1565,T1565.001,T1565.003",
+              "cis": "1.6.1.4",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "mitre_mitigations": "M1026",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "14.6"
+            },
+            "description": "SELinux can run in one of three modes: disabled, permissive, or enforcing: Enforcing - Is the default, and recommended, mode of operation; in enforcing mode SELinux operates normally, enforcing the loaded security policy on the entire system. Permissive - The system acts as if SELinux is enforcing the loaded security policy, including labeling objects and emitting access denial entries in the logs, but it does not actually deny any operations. While not recommended for production systems, permissive mode can be helpful for SELinux policy development. Disabled - Is strongly discouraged; not only does the system avoid enforcing the SELinux policy, it also avoids labeling any persistent objects such as files, making it difficult to enable SELinux in the future Note: you can set individual domains to permissive mode while the system runs in enforcing mode. For example, to make the httpd_t domain permissive: # semanage permissive -a httpd_t.",
+            "id": "31040",
+            "title": "Ensure the SELinux mode is not disabled.",
+            "rationale": "Running SELinux in disabled mode is strongly discouraged; not only does the system avoid enforcing the SELinux policy, it also avoids labeling any persistent objects such as files, making it difficult to enable SELinux in the future.",
+            "command": [
+              "getenforce"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure the SELinux mode is not disabled.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0003"
+        ],
+        "mitre_techniques": [
+          "T1068",
+          "T1565",
+          "T1565.001",
+          "T1565.003"
+        ],
+        "cis": [
+          "1.6.1.4"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1026"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 29,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.908Z",
+      "location": "sca",
+      "id": "1758331617.148647",
+      "timestamp": "2025-09-20T01:26:57.908+0000"
+    },
+    "sort": [
+      1758331617908
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "caq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Run the following command to set SELinux's running mode: # setenforce 1 Edit the /etc/selinux/config file to set the SELINUX parameter: For Enforcing mode: SELINUX=enforcing.",
+            "references": "https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/selinux_users_and_administrators_guide/sect-security-enhanced_linux-introduction-selinux_modes",
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "cis_csc_v8": "3.3",
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-5,AC-6",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1068,T1565,T1565.001,T1565.003",
+              "cis": "1.6.1.5",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "cis_csc_v7": "14.6"
+            },
+            "description": "SELinux can run in one of three modes: disabled, permissive, or enforcing: Enforcing - Is the default, and recommended, mode of operation; in enforcing mode SELinux operates normally, enforcing the loaded security policy on the entire system. Permissive - The system acts as if SELinux is enforcing the loaded security policy, including labeling objects and emitting access denial entries in the logs, but it does not actually deny any operations. While not recommended for production systems, permissive mode can be helpful for SELinux policy development. Disabled - Is strongly discouraged; not only does the system avoid enforcing the SELinux policy, it also avoids labeling any persistent objects such as files, making it difficult to enable SELinux in the future Note: you can set individual domains to permissive mode while the system runs in enforcing mode. For example, to make the httpd_t domain permissive: # semanage permissive -a httpd_t.",
+            "id": "31041",
+            "title": "Ensure the SELinux mode is enforcing.",
+            "rationale": "Running SELinux in disabled mode the system not only avoids enforcing the SELinux policy, it also avoids labeling any persistent objects such as files, making it difficult to enable SELinux in the future. Running SELinux in Permissive mode, though helpful for developing SELinux policy, only logs access denial entries, but does not deny any operations.",
+            "command": [
+              "getenforce"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-5",
+          "AC-6"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure the SELinux mode is enforcing.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1068",
+          "T1565",
+          "T1565.001",
+          "T1565.003"
+        ],
+        "cis": [
+          "1.6.1.5"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 30,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.918Z",
+      "location": "sca",
+      "id": "1758331617.154162",
+      "timestamp": "2025-09-20T01:26:57.918+0000"
+    },
+    "sort": [
+      1758331617918
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "cqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Investigate any unconfined processes found during the audit action. They may need to have an existing security context assigned to them or a policy built for them.",
+            "compliance": {
+              "cis_csc_v8": "3.3",
+              "hipaa": "164.308(a)(3)(i),164.308(a)(3)(ii)(A),164.312(a)(1)",
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0004",
+              "mitre_techniques": "T1068,T1565,T1565.001,T1565.003",
+              "cis": "1.6.1.6",
+              "cmmc_v2": {
+                "0": "AC.L1-3.1.1,AC.L1-3.1.2,AC.L2-3.1.3,AC.L2-3.1.5,MP.L2-3.8.2"
+              },
+              "iso_27001-2013": "A.13.1.3",
+              "mitre_mitigations": "M1022",
+              "pci_dss_v4": {
+                "0": "1.3.1,7.1"
+              },
+              "soc_2": "CC5.2,CC6.1",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "7.1,7.1.1,7.1.2,7.1.3"
+                }
+              },
+              "cis_csc_v7": "9.2"
+            },
+            "description": "Unconfined processes run in unconfined domains.",
+            "id": "31042",
+            "title": "Ensure no unconfined services exist.",
+            "rationale": "For unconfined processes, SELinux policy rules are applied, but policy rules exist that allow processes running in unconfined domains almost all access. Processes running in unconfined domains fall back to using DAC rules exclusively. If an unconfined process is compromised, SELinux does not prevent an attacker from gaining access to system resources and data, but of course, DAC rules are still used. SELinux is a security enhancement on top of DAC rules - it does not replace them.",
+            "command": [
+              "ps -eZ"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "3.3"
+        ],
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "hipaa": [
+          "164.308(a)(3)(i)",
+          "164.308(a)(3)(ii)(A)",
+          "164.312(a)(1)"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure no unconfined services exist.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0004"
+        ],
+        "mitre_techniques": [
+          "T1068",
+          "T1565",
+          "T1565.001",
+          "T1565.003"
+        ],
+        "cis": [
+          "1.6.1.6"
+        ],
+        "iso_27001-2013": [
+          "A.13.1.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "mitre_mitigations": [
+          "M1022"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 31,
+        "soc_2": [
+          "CC5.2",
+          "CC6.1"
+        ],
+        "id": "19007",
+        "cis_csc_v7": [
+          "9.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.928Z",
+      "location": "sca",
+      "id": "1758331617.159529",
+      "timestamp": "2025-09-20T01:26:57.928+0000"
+    },
+    "sort": [
+      1758331617928
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "c6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Run the following command to uninstall setroubleshoot: # dnf remove setroubleshoot.",
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.2.5,2.2.4,6.4.1"
+              },
+              "cis_csc_v8": "4.8",
+              "soc_2": "CC6.3,CC6.6",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "1.1.6,1.2.1,2.2.2,2.2.5"
+                }
+              },
+              "nist_sp_800-53": "AC-3,MP-2",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1543,T1543.002",
+              "cis": "1.6.1.7",
+              "cmmc_v2": {
+                "0": "CM.L2-3.4.7,CM.L2-3.4.8,SC.L2-3.13.6"
+              },
+              "iso_27001-2013": "A.9.1.1",
+              "cis_csc_v7": "14.6"
+            },
+            "description": "The SETroubleshoot service notifies desktop users of SELinux denials through a user-friendly interface. The service provides important information around configuration errors, unauthorized intrusions, and other potential errors.",
+            "id": "31043",
+            "title": "Ensure SETroubleshoot is not installed.",
+            "rationale": "The SETroubleshoot service is an unnecessary daemon to have running on a server, especially if X Windows is disabled.",
+            "command": [
+              "rpm -q setroubleshoot"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "4.8"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "AC-3",
+          "MP-2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure SETroubleshoot is not installed.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1543",
+          "T1543.002"
+        ],
+        "cis": [
+          "1.6.1.7"
+        ],
+        "iso_27001-2013": [
+          "A.9.1.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 11,
+        "soc_2": [
+          "CC6.3",
+          "CC6.6"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "14.6"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.938Z",
+      "location": "sca",
+      "id": "1758331617.162975",
+      "timestamp": "2025-09-20T01:26:57.938+0000"
+    },
+    "sort": [
+      1758331617938
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "dKq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Run the following command to uninstall mcstrans: # dnf remove mcstrans.",
+            "compliance": {
+              "pci_dss_v4": {
+                "0": "1.2.5,2.2.4,6.4.1"
+              },
+              "cis_csc_v8": "4.8",
+              "soc_2": "CC6.3,CC6.6",
+              "pci_dss_v3": {
+                "2": {
+                  "1": "1.1.6,1.2.1,2.2.2,2.2.5"
+                }
+              },
+              "nist_sp_800-53": "SI-4",
+              "mitre_tactics": "TA0005",
+              "mitre_techniques": "T1543,T1543.002",
+              "cis": "1.6.1.8",
+              "cmmc_v2": {
+                "0": "CM.L2-3.4.7,CM.L2-3.4.8,SC.L2-3.13.6"
+              },
+              "iso_27001-2013": "A.13.1.3",
+              "cis_csc_v7": "9.2"
+            },
+            "description": "The mcstransd daemon provides category label information to client processes requesting information. The label translations are defined in /etc/selinux/targeted/setrans.conf.",
+            "id": "31044",
+            "title": "Ensure the MCS Translation Service (mcstrans) is not installed.",
+            "rationale": "Since this service is not used very often, remove it to reduce the amount of potentially vulnerable code running on the system.",
+            "command": [
+              "rpm -q mcstrans"
+            ]
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "cis_csc_v8": [
+          "4.8"
+        ],
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "nist_sp_800-53": [
+          "SI-4"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure the MCS Translation Service (mcstrans) is not installed.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0005"
+        ],
+        "mitre_techniques": [
+          "T1543",
+          "T1543.002"
+        ],
+        "cis": [
+          "1.6.1.8"
+        ],
+        "iso_27001-2013": [
+          "A.13.1.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 12,
+        "soc_2": [
+          "CC6.3",
+          "CC6.6"
+        ],
+        "id": "19008",
+        "cis_csc_v7": [
+          "9.2"
+        ]
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.949Z",
+      "location": "sca",
+      "id": "1758331617.165696",
+      "timestamp": "2025-09-20T01:26:57.949+0000"
+    },
+    "sort": [
+      1758331617949
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "daq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "passed",
+            "remediation": "Edit the /etc/motd file with the appropriate contents according to your site policy, remove any instances of \\m , \\r , \\s , \\v or references to the OS platform OR If the motd is not used, this file can be removed. Run the following command to remove the motd file: # rm /etc/motd.",
+            "file": [
+              "/etc/motd"
+            ],
+            "compliance": {
+              "mitre_tactics": "TA0007",
+              "mitre_techniques": "T1082,T1592,T1592.004",
+              "cis": "1.7.1"
+            },
+            "description": "The contents of the /etc/motd file are displayed to users after login and function as a message of the day for authenticated users. Unix-based systems have typically displayed information about the OS release and patch level upon logging in to the system. This information can be useful to developers who are developing software for a particular OS platform. If mingetty(8) supports the following options, they display operating system information: \\m - machine architecture \\r - operating system release \\s - operating system name \\v - operating system version.",
+            "id": "31045",
+            "title": "Ensure message of the day is configured properly.",
+            "rationale": "Warning messages inform users who are attempting to login to the system of their legal status regarding the system and must include the name of the organization that owns the system and any monitoring policies that are in place. Displaying OS and patch level information in login banners also has the side effect of providing detailed system information to attackers attempting to target specific exploits of a system. Authorized users can easily get this information by running the \" uname -a \" command once they have logged in."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "mail": false,
+        "level": 3,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure message of the day is configured properly.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0007"
+        ],
+        "mitre_techniques": [
+          "T1082",
+          "T1592",
+          "T1592.004"
+        ],
+        "cis": [
+          "1.7.1"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 13,
+        "id": "19008"
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.959Z",
+      "location": "sca",
+      "id": "1758331617.168343",
+      "timestamp": "2025-09-20T01:26:57.959+0000"
+    },
+    "sort": [
+      1758331617959
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "dqq7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/issue file with the appropriate contents according to your site policy, remove any instances of \\m , \\r , \\s , \\v or references to the OS platform # echo \"Authorized uses only. All activity may be monitored and reported.\" > /etc/issue.",
+            "file": [
+              "/etc/issue"
+            ],
+            "compliance": {
+              "mitre_tactics": "TA0007",
+              "mitre_techniques": "T1082,T1592,T1592.004",
+              "cis": "1.7.2"
+            },
+            "description": "The contents of the /etc/issue file are displayed to users prior to login for local terminals. Unix-based systems have typically displayed information about the OS release and patch level upon logging in to the system. This information can be useful to developers who are developing software for a particular OS platform. If mingetty(8) supports the following options, they display operating system information: \\m - machine architecture \\r - operating system release \\s - operating system name \\v - operating system version - or the operating system's name.",
+            "id": "31046",
+            "title": "Ensure local login warning banner is configured properly.",
+            "rationale": "Warning messages inform users who are attempting to login to the system of their legal status regarding the system and must include the name of the organization that owns the system and any monitoring policies that are in place. Displaying OS and patch level information in login banners also has the side effect of providing detailed system information to attackers attempting to target specific exploits of a system. Authorized users can easily get this information by running the \" uname -a \" command once they have logged in."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure local login warning banner is configured properly.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0007"
+        ],
+        "mitre_techniques": [
+          "T1082",
+          "T1592",
+          "T1592.004"
+        ],
+        "cis": [
+          "1.7.2"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 32,
+        "id": "19007"
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.969Z",
+      "location": "sca",
+      "id": "1758331617.172298",
+      "timestamp": "2025-09-20T01:26:57.969+0000"
+    },
+    "sort": [
+      1758331617969
+    ]
+  },
+  {
+    "_index": "wazuh-alerts-4.x-2025.09.20",
+    "_id": "d6q7ZJkBbhCOWrYIzdDs",
+    "_score": null,
+    "_source": {
+      "agent": {
+        "name": "ip-192-168-1-60.ec2.internal",
+        "id": "000"
+      },
+      "manager": {
+        "name": "ip-192-168-1-60.ec2.internal"
+      },
+      "data": {
+        "sca": {
+          "scan_id": "376195598",
+          "check": {
+            "result": "failed",
+            "remediation": "Edit the /etc/issue.net file with the appropriate contents according to your site policy, remove any instances of \\m , \\r , \\s , \\v or references to the OS platform # echo \"Authorized uses only. All activity may be monitored and reported.\" > /etc/issue.net.",
+            "file": [
+              "/etc/issue.net"
+            ],
+            "compliance": {
+              "mitre_tactics": "TA0007",
+              "mitre_techniques": "T1018,T1082,T1592,T1592.004",
+              "cis": "1.7.3"
+            },
+            "description": "The contents of the /etc/issue.net file are displayed to users prior to login for remote connections from configured services. Unix-based systems have typically displayed information about the OS release and patch level upon logging in to the system. This information can be useful to developers who are developing software for a particular OS platform. If mingetty(8) supports the following options, they display operating system information: \\m - machine architecture \\r - operating system release \\s - operating system name \\v - operating system version.",
+            "id": "31047",
+            "title": "Ensure remote login warning banner is configured properly.",
+            "rationale": "Warning messages inform users who are attempting to login to the system of their legal status regarding the system and must include the name of the organization that owns the system and any monitoring policies that are in place. Displaying OS and patch level information in login banners also has the side effect of providing detailed system information to attackers attempting to target specific exploits of a system. Authorized users can easily get this information by running the \" uname -a \" command once they have logged in."
+          },
+          "type": "check",
+          "policy": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0."
+        }
+      },
+      "rule": {
+        "mail": false,
+        "level": 7,
+        "pci_dss": [
+          "2.2"
+        ],
+        "tsc": [
+          "CC7.1",
+          "CC7.2"
+        ],
+        "description": "CIS Benchmark for Amazon Linux 2023 Benchmark v1.0.0.: Ensure remote login warning banner is configured properly.",
+        "groups": [
+          "sca"
+        ],
+        "mitre_tactics": [
+          "TA0007"
+        ],
+        "mitre_techniques": [
+          "T1018",
+          "T1082",
+          "T1592",
+          "T1592.004"
+        ],
+        "cis": [
+          "1.7.3"
+        ],
+        "nist_800_53": [
+          "CM.1"
+        ],
+        "gdpr": [
+          "IV_35.7.d"
+        ],
+        "firedtimes": 33,
+        "id": "19007"
+      },
+      "decoder": {
+        "name": "sca"
+      },
+      "input": {
+        "type": "log"
+      },
+      "@timestamp": "2025-09-20T01:26:57.979Z",
+      "location": "sca",
+      "id": "1758331617.176212",
+      "timestamp": "2025-09-20T01:26:57.979+0000"
+    },
+    "sort": [
+      1758331617979
+    ]
+  }
+]
