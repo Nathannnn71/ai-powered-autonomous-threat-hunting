@@ -10,7 +10,7 @@ Frontend pulls data directly from S3:
 
 ```
 
-s3://\<YOUR\_BUCKET>/latest\_analysis.json
+http://ai-powered-autonomous-threat-hunting-website.s3-website-us-east-1.amazonaws.com 
 
 ```
 
