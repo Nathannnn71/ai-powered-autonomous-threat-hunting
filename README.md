@@ -69,6 +69,4 @@ s3://\<YOUR\_BUCKET>/latest\_analysis.json
 - For production, integrate with **IAM roles** and restrict public access.
 
 ---
-```
 
-Would you like me to also add **installation & deployment instructions** (React build + AWS setup) so the README is ready for GitHub users to clone and run?
